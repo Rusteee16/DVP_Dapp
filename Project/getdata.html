@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+    <title>DVP Dashboard</title>
+    <style>
+        body {
+
+            font-family: Poppins;
+         background-blend-mode:lighten;
+       background-image: url("https://www.canberratimes.com.au/images/transform/v1/crop/frm/Jaez6cQAZmjZzLGnKwDCWc/342dcf06-342b-4859-892e-6c8f05ccfa35.jpg/r0_397_7662_4726_w1200_h678_fmax.jpg");
+            background-color:rgb(129, 126, 126);
+background-size: contain;
+    
+        }
+        #logout_btn
+        {
+            position: absolute;
+            top: 20px;
+            left: 15px;
+            background-color: rgb(17, 151, 28);
+		
+			font-family: Poppins;
+			border: none;
+			color: white;
+			padding: 15px 32px;
+			margin: 10px 10px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			border-radius: 5px;
+        }
+		#searchWrapper::after
+        {
+            content: '🔍';
+            position: absolute;
+            top: 20px;
+            right: 15px;
+        }
+        .card {
+            
+            border-color:rgba(94, 92, 110, 0.911);;
+          
+            width: 30%;
+            padding: 20px;
+            background-color: rgb(255, 255, 255);
+            margin: 30px;
+			margin-top: 80px;
+           margin-left: 120px;
+           float: left;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+            border-radius: 10px;
+          background-size: 200px;
+           background-position: 180px 140px ;
+           background-repeat: no-repeat;
+            background-image: url("http://static1.squarespace.com/static/57a370e9e58c6272ab5b8ec5/t/60d0b9b79c02d5515f5aaa29/1624291779081/Screenshot+2021-06-21+120844.png?format=1500w");
+        }
+
+        .cardheader {
+           
+            background-color: rgba(0, 187, 47, 0.459);
+            padding: .1px;
+        
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .carddesc {
+            padding: 20px;
+            font-size: 11px;
+           
+        }
+
+        label {
+            color: rgba(39, 167, 22, 0.87);
+            font-size: 12px;
+        }
+        .more{
+
+background-color: rgb(66, 69, 71);
+width:100%;
+padding: 10px;
+font-size: 10px;
+border-radius: 5px;
+text-align: center;
+
+        }
+        .more:hover{
+            background-color: rgb(36, 37, 37);
+        }
+        a{
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+
+<body>
+    <div id="accordion">
+
+    </div>
+        
+    <div><button 
+        id="logout_btn" 
+        name="logout" 
+        value="logout" 
+        class="btn solid" 
+        type="submit"
+         >
+        LogOut</button></div>
+    
+	<div id="searchWrapper"style="position:absolute;right:40px;">
+        <input
+            type="text"
+            name="searchBar"
+            id="searchBar"
+            placeholder="Search Aadhar number"
+            style="width: 400px;
+                height: 32px;
+                border-radius: 3px;
+                border: 1px solid #eaeaea;
+                padding: 5px 10px;
+                font-size: 12px;
+                margin-top:10px;
+                text-align:center;
+                "
+        />
+    </div>
+    <script type="text/javascript" src="scr.js"></script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+    <script>
+        const provider = new ethers.providers.Web3Provider(window.ethereum, "ropsten");
+
+const MoodContractAddress = "Smart contract address key";
+const MoodContractABI =[
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "Patient",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "Name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "Adhaar_Number",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "Vaccine",
+						"type": "string"
+					}
+				],
+				"name": "addToBlockChain",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "FrontLineWorker",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "Patient",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "Name",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "Adhaar_Number",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "Vaccine",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "Time_stamp",
+						"type": "uint256"
+					}
+				],
+				"name": "Enter",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "getAllPatientData",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "FrontLineWorker",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "Patient",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "Name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "Adhaar_Number",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "Vaccine",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "Time_stamp",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct Covid_Project.Patient_Data[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getEnteriesCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		]
+let MoodContract;
+let signer;
+var isPaused=false;
+
+function sendRequest()
+{
+    isPaused=true;
+    console.log("Initial isPaused",isPaused);
+provider.send("eth_requestAccounts", []).then(() => {
+    provider.listAccounts().then((accounts) => {
+        signer = provider.getSigner(accounts[0]);
+        MoodContract = new ethers.Contract(
+            MoodContractAddress,
+            MoodContractABI,
+            signer
+        );
+        console.log("Moodcontract",MoodContract);
+    const getMoodPromise = MoodContract.getAllPatientData();
+    const Mood =  getMoodPromise;
+    
+    console.log("Promise",Mood);
+	return Mood;
+   // sessionStorage.setItem('TheArray',JSON.stringify(Mood));
+        //console.log(MoodContract);
+	}).then(function(response){
+	console.log("Response",response);
+	var arrayString=JSON.stringify(response);
+	console.log("ArrayString",arrayString);
+	return arrayString;
+}).then(function(result)
+{
+	console.log("result",result);
+	var apiResult = JSON.parse(result);
+	console.log("apiresult",apiResult);
+	const container = document.getElementById('accordion');
+	displayCharacters(apiResult);
+	const searchBar=document.getElementById('searchBar');
+        
+        searchBar.addEventListener('keyup',(e)=>{
+            container.innerHTML="";
+           const searchString= e.target.value;
+           const filteredCharacters=apiResult.filter(character=>{
+               return character[3].includes(searchString)
+           });
+           console.log(filteredCharacters);
+           displayCharacters(filteredCharacters);
+        });
+	function displayCharacters(apiResult)
+	{
+		apiResult.forEach((result, idx) => {
+            // Create card element
+            const card = document.createElement('div');
+            card.classList = 'card-body';
+
+            // Construct card content
+			console.log("Hex",result[5].hex);
+			var decimalTime=parseInt(result[5].hex);
+			console.log("Deccimal",decimalTime);
+			var t=new Date(decimalTime*1000);
+			console.log(t);
+            const content = `
+    <div class="card">
+    
+
+    
+      <div class="card-body">
+<div class="cardheader">
+        <h4>${result[2]}</h4>
+        
+       </div>
+       <div class="carddesc">
+       
+       <label>Aadhar Number</label>
+       <p>${result[3]}</p>
+       <label>Address</label>
+       <p>${result[1]}</p>
+       <label>Vaccination</label>
+       <p>${result[4]}</p>
+       <label>FrontLine Worker Id</label>
+       <p>${result[0]}</p>
+	   <label> Timestamp</label>
+	   <p>${t}</p>
+       
+       </div>
+      
+      </div>
+     
+    </div>
+  
+  </div>
+  `;
+
+            // Append newyly created card element to the container
+            container.innerHTML += content;
+        });
+	/*var apiResult = JSON.parse(sessionString);
+
+        console.log("apiresult",apiResult);
+        const container = document.getElementById('accordion');
+
+        apiResult.forEach((result, idx) => {
+            // Create card element
+            const card = document.createElement('div');
+            card.classList = 'card-body';
+
+            // Construct card content
+            const content = `
+    <div class="card">
+    
+
+    
+      <div class="card-body">
+<div class="cardheader">
+        <h4>${result[2]}</h4>
+        
+       </div>
+       <div class="carddesc">
+       
+       <label>Aadhar Number</label>
+       <p>${result[3]}</p>
+       <label>Address</label>
+       <p>${result[1]}</p>
+       <label>Vaccination</label>
+       <p>${result[4]}</p>
+       <label>FrontLine Worker Id</label>
+       <p>${result[0]}</p>
+       <a href="#"><div class="more">Know More</div><a>
+       </div>
+      
+      </div>
+     
+    </div>
+  
+  </div>
+  `;
+
+            // Append newyly created card element to the container
+            container.innerHTML += content;
+        });*/
+	}
+});
+});
+isPaused=false;
+console.log("Later isPaused",isPaused);
+}
+
+/*console.log("any");
+async function getDataa() {
+    console.log("Moodcontract",MoodContract);
+    const getMoodPromise = MoodContract.getAllPatientData();
+    const Mood = await getMoodPromise;
+    
+    console.log(Mood);
+    sessionStorage.setItem('TheArray',JSON.stringify(Mood));
+}
+getDataa();*/
+async function showData()
+{
+        console.log(await sendRequest());
+        function waitFOrIt()
+        {
+            if(isPaused)
+            {
+                setTimeout(function(){waitForIt()},10000);
+            }
+            else{
+        //var sessionString = sessionStorage.getItem('TheArray');
+        
+        //console.log("sessionString",sessionString);
+        var apiResult = JSON.parse(sessionString);
+
+        console.log("apiresult",apiResult);
+        const container = document.getElementById('accordion');
+
+        apiResult.forEach((result, idx) => {
+            // Create card element
+            const card = document.createElement('div');
+            card.classList = 'card-body';
+
+            // Construct card content
+            const content = `
+    <div class="card">
+    
+
+    
+      <div class="card-body">
+<div class="cardheader">
+        <h4>${result[2]}</h4>
+        
+       </div>
+       <div class="carddesc">
+       
+       <label>Aadhar Number</label>
+       <p>${result[3]}</p>
+       <label>Address</label>
+       <p>${result[1]}</p>
+       <label>Vaccination</label>
+       <p>${result[4]}</p>
+       <label>FrontLine Worker Id</label>
+       <p>${result[0]}</p>
+       
+       </div>
+      
+      </div>
+     
+    </div>
+  
+  </div>
+  `;
+
+            // Append newyly created card element to the container
+            container.innerHTML += content;
+        });
+    }
+    }
+    }
+    showData();
+	
+    </script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+      import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
+      import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+    
+        // Your web app's Firebase configuration
+        const firebaseConfig = {}
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database=getDatabase(app);
+        const auth=getAuth();
+        console.log(app.name);
+        const user = auth.currentUser;
+        onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/firebase.User
+            var uid = user.uid;
+            // ...
+        } 
+        else{
+            location.replace("hcplp.html");
+        } 
+        });
+        logout_btn.addEventListener('click',(e)=>{
+            signOut(auth).then(() => {
+            // Sign-out successful.
+            location.replace("hcplp.html");
+        }).catch((error) => {
+            // An error happened.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+                alert(errorMessage);
+        });
+
+        });
+
+</script>
+
+</body>
+
+</head>
+
+</html>

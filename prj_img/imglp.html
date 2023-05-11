@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script
+   src="https://kit.fontawesome.com/64d58efce2.js"
+   crossorigin="anonymous"
+  ></script>
+  <link rel="stylesheet" href="style.css" />
+  <title>Immigration Officer Sign In</title>
+  
+ </head>
+
+ <body>
+  <div class="container">
+   <div class="forms-container">
+    <div class="signin">
+     <div id="hcp-lf" class="sign-in-form">
+      <h2 class="title">Sign in</h2>
+      <div class="input-field">
+       <i class="fas fa-user"></i>
+       <input type="text" id="im_id" placeholder="Immigration Authority Id" />
+      </div>
+      <div class="input-field">
+       <i class="fas fa-lock"></i>
+       <input type="password" id="im_pwd" placeholder="Immigration Personel Id" />
+      </div>
+      <button id="login" name="login" value="login" class="btn solid" type="submit">Sign In</button>
+      </div>
+    </div>
+    </div>
+   </div>
+
+   <div class="panels-container">
+    <div class="panel left-panel">
+     <div class="content">
+      <h3>Immigration Officers</h3>
+      <p>
+        Only registered users under Immigration authorities are authorised to enter.
+      </p>
+     </div>
+     <img src="log.svg" class="image" alt="" />
+    </div>
+   </div>
+  </div>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+  import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = { };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database=getDatabase(app);
+    const auth=getAuth();
+    console.log(app.name);
+
+    login.addEventListener('click',(e)=>{
+   var email = document.getElementById('im_id').value;
+   var password = document.getElementById('im_pwd').value;
+
+      signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+
+        const dt = new Date();
+         update(ref(database, 'users/' + user.uid),{
+          last_login: dt,
+        })
+        location.replace("getdata.html");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        alert(errorMessage);
+  });
+
+ });
+ const user = auth.currentUser;
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    var uid = user.uid;
+    location.replace("getdata.html");
+    // ...
+  }  
+});
+  </script>
+ </body>
+</html>
